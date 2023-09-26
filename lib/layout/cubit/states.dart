@@ -1,2 +1,20 @@
 abstract class SocialStates{}
 
+class SocialInitialState extends SocialStates{}
+
+class SocialGetUserLodingState extends SocialStates{}
+class SocialGetUserSuccessState extends SocialStates{}
+class SocialGetUserErrorState extends SocialStates{
+  final String error;
+
+  SocialGetUserErrorState(this.error);
+}
+
+
+class SocialChangeBottomNavState extends SocialStates{}
+class SocialAddPostState extends SocialStates{}
+
+
+
+
+
