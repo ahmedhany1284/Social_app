@@ -22,7 +22,7 @@ class UserModel {
 
   UserModel.fromJson(Map<String,dynamic>json){
     name=json['name'];
-    email=json['enail'];
+    email=json['email'];
     phone=json['phone'];
     uId=json['uId'];
     image=json['image'];

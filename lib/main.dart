@@ -20,7 +20,7 @@ void main() async{
   Widget widget;
   uId = CacheHelper.getData(key: 'uId');
   print('UID--> $uId');
-  if(uId.isEmpty){
+  if(uId == null||uId.isEmpty){
     widget=LoginScreen();
     print('UID--> $uId');
   }

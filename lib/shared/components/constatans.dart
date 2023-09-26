@@ -16,4 +16,4 @@ void printFullText(dynamic text) {
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
 }
 
-String uId = '';
+var uId;
