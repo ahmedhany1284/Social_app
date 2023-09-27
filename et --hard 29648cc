@@ -1,0 +1,8 @@
+[33m07c4a26[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: checkout: moving from master to master
+[33m07c4a26[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{1}: reset: moving to 07c4a26
+[33m07c4a26[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{2}: reset: moving to HEAD^
+[33mbb83fc7[m HEAD@{3}: reset: moving to HEAD~2
+[33m29648cc[m HEAD@{4}: commit: updating the settings screen
+[33med42630[m HEAD@{5}: commit: updating the feeds screen with static data
+[33mbb83fc7[m HEAD@{6}: commit: first commit created the login and password screens with the the authentication procces email and password authentication
+[33m07c4a26[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{7}: commit (initial): Save local changes before upgrading Flutter
