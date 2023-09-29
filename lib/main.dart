@@ -10,6 +10,7 @@ import 'package:social_app/shared/components/constatans.dart';
 import 'package:social_app/shared/network/local/cacheHelper.dart';
 import 'package:social_app/shared/network/remote/dio_helper.dart';
 import 'package:social_app/shared/style/theme.dart';
+import 'package:toast/toast.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
       child: BlocConsumer<SocialCubit,SocialStates>(
         listener: (context,state){},
         builder: (context ,state){
+          ToastContext().init(context);
           return MaterialApp(
             title: 'Flutter Demo',
             theme: lightTheme,

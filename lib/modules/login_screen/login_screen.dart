@@ -8,6 +8,7 @@ import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/network/local/cacheHelper.dart';
 import 'package:social_app/models/login_model/login_model.dart';
+import 'package:toast/toast.dart';
 
 class LoginScreen extends StatelessWidget {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
@@ -23,21 +24,23 @@ class LoginScreen extends StatelessWidget {
       create: (BuildContext context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
+          ToastContext().init(context);
           if (state is LoginErrorState) {
+            String msg = state.error.substring(state.error.indexOf("]") + 1).trim();
             print(state.error);
-            // showToast(
-            //   massage: state.error,
-            //   state: ToastStates.ERROR,
-            // );
+            showToast(
+              massage:msg,
+              state: ToastStates.ERROR,
+            );
           }
           if (state is LoginSuccessState) {
             CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
               navigateToAndFinish(context, HomeLayout());
               print('Logged in Succesfully');
-              // showToast(
-              //   massage: 'Logged in Succesfully',
-              //   state: ToastStates.SUCCESS,
-              // );
+              showToast(
+                massage: 'Logged in Succesfully',
+                state: ToastStates.SUCCESS,
+              );
             });
 
 

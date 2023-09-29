@@ -5,6 +5,7 @@ import 'package:social_app/modules/login_screen/login_screen.dart';
 import 'package:social_app/modules/register/cubit/cubit.dart';
 import 'package:social_app/modules/register/cubit/states.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:toast/toast.dart';
 
 class RegisterScreen extends StatelessWidget {
   var formkey = GlobalKey<FormState>();
@@ -15,25 +16,34 @@ class RegisterScreen extends StatelessWidget {
   var phoneController = TextEditingController();
   var password;
   var repassword;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RegisterCubit>(
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
+          ToastContext().init(context);
+          if (state is RegisterErrorState) {
+            showToast(
+                massage:
+                    state.error.substring(state.error.indexOf("]") + 1).trim(),
+                state: ToastStates.ERROR);
+          }
           if (state is CreateUserSuccessState) {
             navigateToAndFinish(
               context,
               LoginScreen(),
             );
-            print('Account created successfully''');
-            // showToast(
-            //   massage: 'Account created successfully',
-            //   state: ToastStates.SUCCESS,
-            // );
+            print('Account created successfully' '');
+            showToast(
+              massage: 'Account created successfully',
+              state: ToastStates.SUCCESS,
+            );
           }
         },
         builder: (context, state) {
+          ToastContext().init(context);
           return Scaffold(
             appBar: AppBar(),
             body: Padding(
@@ -95,11 +105,10 @@ class RegisterScreen extends StatelessWidget {
                           },
                           type: TextInputType.emailAddress,
                           validate: (value) {
-
                             if (value!.isEmpty) {
                               return 'Password is too short';
                             }
-                            password=value;
+                            password = value;
                             print('enter ${password}     ${repassword}');
                           },
                           label: 'password',
@@ -121,8 +130,7 @@ class RegisterScreen extends StatelessWidget {
                             print('reenter  ${password}     ${repassword}');
                             if (repassword!.isEmpty) {
                               return 'Password is too short';
-                            }
-                            else if(password!=repassword){
+                            } else if (password != repassword) {
                               return 'password does not match';
                             }
                             return null;

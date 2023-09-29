@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/modules/new_post/new_post_Screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constatans.dart';
+import 'package:social_app/shared/network/local/cacheHelper.dart';
 import 'package:social_app/shared/style/icon_broken.dart';
 
 class HomeLayout extends StatelessWidget {
@@ -40,6 +43,14 @@ class HomeLayout extends StatelessWidget {
                 onPressed: () {},
                 icon: Icon(
                   IconBroken.Search,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+
+                },
+                icon: Icon(
+                  IconBroken.Logout,
                 ),
               ),
             ],
