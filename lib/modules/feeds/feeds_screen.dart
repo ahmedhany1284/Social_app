@@ -1,50 +1,76 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/cubit.dart';
+import 'package:social_app/layout/cubit/states.dart';
+import 'package:social_app/models/post_model/post_model.dart';
 import 'package:social_app/shared/style/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
-  const FeedsScreen({super.key});
-
+   FeedsScreen({super.key});
+  int? cur_ind;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 20.0,
-            margin: EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Image(
-                  image: NetworkImage(
-                    'https://img.freepik.com/free-vector/brainstorming-concept-landing-page_52683-25791.jpg',
+    return BlocConsumer<SocialCubit, SocialStates>(
+      listener: (context, state) {
+        if (state is SocialLikeSuccessState){
+
+        }
+      },
+      builder: (context, state) {
+        return ConditionalBuilder(
+          condition: SocialCubit.get(context).posts.length > 0 || SocialCubit.get(context).userModel!=null,
+          builder: (BuildContext context) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    elevation: 20.0,
+                    margin: EdgeInsets.all(8.0),
+                    child: Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children: [
+                        Image(
+                          image: NetworkImage(
+                            'https://img.freepik.com/free-vector/brainstorming-concept-landing-page_52683-25791.jpg',
+                          ),
+                          fit: BoxFit.cover,
+                          height: 200.0,
+                          width: double.infinity,
+                        ),
+                      ],
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                  height: 200.0,
-                  width: double.infinity,
-                ),
-              ],
-            ),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) => buildPostItem(context),
-            separatorBuilder: (context, index) => SizedBox(
-              height: 8.0,
-            ),
-            itemCount: 10,
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-        ],
-      ),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      cur_ind=index;
+                      return buildPostItem(
+                          SocialCubit.get(context).posts[index], context,index);
+                    },
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 8.0,
+                    ),
+                    itemCount:SocialCubit.get(context).posts.length,
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                ],
+              ),
+            );
+          },
+          fallback: (BuildContext context) {
+            return Center(child: CircularProgressIndicator());
+          },
+        );
+      },
     );
   }
 
-  Widget buildPostItem(context) => Card(
+  Widget buildPostItem(PostModel model, context,index) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -56,8 +82,7 @@ class FeedsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 25.0,
-                    backgroundImage: NetworkImage(
-                        'https://img.freepik.com/free-photo/bohemian-man-with-his-arms-crossed_1368-3542.jpg'),
+                    backgroundImage: NetworkImage('${SocialCubit.get(context).userModel!.image}'),
                   ),
                   SizedBox(
                     width: 15.0,
@@ -69,7 +94,7 @@ class FeedsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              'Ahmed Hany',
+                              '${model.name}',
                               style: TextStyle(
                                 height: 1.4,
                               ),
@@ -85,7 +110,7 @@ class FeedsScreen extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'jan 2021 at 11:00 pm',
+                          '${model.dateTime}',
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
@@ -111,26 +136,33 @@ class FeedsScreen extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-              Text(
-                'This page shares my best articles to read on topics like health, happiness, creativity, productivity and more. The central question that drives my work is, “How can we live better?” To answer that question, I like to write about science-based ways to solve practical problems.',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Container(
-                  height: 150.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        'https://img.freepik.com/free-photo/october-natural-landscape-with-colored-leaves_23-2149483570.jpg',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    '${model.text}',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ),
+              if (model.postImage != '')
+                Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  child: Container(
+                    height: 150.0,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          '${model.postImage}',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
               Row(
                 children: [
                   Expanded(
@@ -143,12 +175,13 @@ class FeedsScreen extends StatelessWidget {
                               IconBroken.Heart,
                               color: Colors.red,
                               size: 16.0,
+                              fill:1.0,
                             ),
                             SizedBox(
                               width: 5.0,
                             ),
                             Text(
-                              '1200',
+                              '${SocialCubit.get(context).numLikes}',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -200,7 +233,7 @@ class FeedsScreen extends StatelessWidget {
                           CircleAvatar(
                             radius: 18.0,
                             backgroundImage: NetworkImage(
-                                'https://img.freepik.com/free-photo/bohemian-man-with-his-arms-crossed_1368-3542.jpg'),
+                                '${SocialCubit.get(context).userModel?.image}'),
                           ),
                           SizedBox(
                             width: 15.0,
@@ -229,12 +262,24 @@ class FeedsScreen extends StatelessWidget {
                           width: 5.0,
                         ),
                         Text(
-                          'Like',
+                          SocialCubit.get(context).likeID==null?'Like':'Liked',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      if(SocialCubit.get(context).likeID == null){
+                        SocialCubit.get(context).numLikes++;
+                        SocialCubit.get(context).likePost(SocialCubit.get(context).postsId[index]);
+                        SocialCubit.get(context).likeID=SocialCubit.get(context).postsId[index];
+                      }
+                      else{
+                        SocialCubit.get(context).numLikes--;
+                        SocialCubit.get(context).deleteLike(SocialCubit.get(context).postsId[index]);
+                        SocialCubit.get(context).likeID=null;
+                      }
+
+                    },
                   ),
                 ],
               ),

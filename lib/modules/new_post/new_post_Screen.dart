@@ -10,7 +10,6 @@ class NewPostScreen extends StatelessWidget {
   NewPostScreen({super.key});
 
   var textController = TextEditingController();
-  var postTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +21,32 @@ class NewPostScreen extends StatelessWidget {
           appBar:
               customAppBar(context: context, title: 'Create Post', actions: [
             TextButton(
-                onPressed: () {
-                  if (textController.text.isEmpty) {
-                    showToast(massage: 'Write somthing first', state: ToastStates.WARNING);
+              onPressed: () {
+                if (textController.text.isEmpty) {
+                  showToast(
+                      massage: 'Write somthing first',
+                      state: ToastStates.WARNING);
+                } else {
+                  if (SocialCubit.get(context).postImage == null) {
+                    SocialCubit.get(context).createPost(
+                      dateTime: DateTime.now().toString(),
+                      text: textController.text,
+                    );
+                    SocialCubit.get(context).getPosts();
                   } else {
-                    if (SocialCubit.get(context).postImage == null) {
-                      SocialCubit.get(context).createPost(
-                          dateTime: postTime.toString(),
-                          text: textController.text);
-                    } else {
-                      SocialCubit.get(context).uploadPostImage(
-                          dateTime: postTime.toString(),
-                          text: textController.text);
-                    }
+                    SocialCubit.get(context).uploadPostImage(
+                        dateTime: DateTime.now().toString(),
+                        text: textController.text);
+                    SocialCubit.get(context).getPosts();
                   }
-                },
-                child: Text(
-                  'Post',
-                ))
+                }
+                Navigator.pop(context);
+
+              },
+              child: Text(
+                'Post',
+              ),
+            )
           ]),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -56,7 +63,7 @@ class NewPostScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 25.0,
                       backgroundImage: NetworkImage(
-                          'https://img.freepik.com/free-photo/bohemian-man-with-his-arms-crossed_1368-3542.jpg'),
+                          '${SocialCubit.get(context).userModel!.image}'),
                     ),
                     SizedBox(
                       width: 15.0,
@@ -68,7 +75,7 @@ class NewPostScreen extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Ahmed Hany',
+                                '${SocialCubit.get(context).userModel!.name}',
                                 style: TextStyle(
                                   height: 1.4,
                                 ),
@@ -92,6 +99,7 @@ class NewPostScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextFormField(
+                    controller: textController,
                     decoration: InputDecoration(
                       hintText: 'What is on your mind... ',
                       border: InputBorder.none,
@@ -131,26 +139,29 @@ class NewPostScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                Row(
-                  children: [
-                    Expanded(
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextButton(
+                              onPressed: () {
+                                SocialCubit.get(context).getPostImage();
+                              },
+                              child: Icon(IconBroken.Image))),
+                      Expanded(
                         child: TextButton(
-                            onPressed: () {
-                              SocialCubit.get(context).getPostImage();
-                            },
-                            child: Icon(IconBroken.Image))),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          '#',
-                          style: TextStyle(
-                            fontSize: 20.0,
+                          onPressed: () {},
+                          child: Text(
+                            '#',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),

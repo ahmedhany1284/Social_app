@@ -21,6 +21,8 @@ class SocialCubit extends Cubit<SocialStates> {
   static SocialCubit get(context) => BlocProvider.of(context);
 
   UserModel? userModel;
+  int numLikes=0;
+  String? likeID;
 
   void getUserData() {
     emit(SocialGetUserLodingState());
@@ -213,6 +215,7 @@ class SocialCubit extends Cubit<SocialStates> {
       value.ref.getDownloadURL().then((value) {
         print(value);
         createPost(dateTime: dateTime, text: text, postImage: value);
+        getPosts();
         emit(SocialCreatePostSuccessState());
       }).catchError((error) {
         emit(SocialCreatePostErrorState());
@@ -235,21 +238,75 @@ class SocialCubit extends Cubit<SocialStates> {
       dateTime: dateTime,
       text: text,
       postImage: postImage ?? '',
+      numLikes: numLikes,
     );
 
     FirebaseFirestore.instance
         .collection('posts')
         .add(model.toMap())
         .then((value) {
-          emit(SocialCreatePostSuccessState());
-    })
-        .catchError((error) {
+      getPosts();
+      emit(SocialCreatePostSuccessState());
+    }).catchError((error) {
       emit(SocialCreatePostErrorState());
     });
   }
 
-  void removePostImage(){
-    postImage=null;
+  void removePostImage() {
+    postImage = null;
     emit(SocialRemovePostIMageSuccessState());
+  }
+
+  List<PostModel> posts = [];
+  List<String> postsId = [];
+  List<int> likes = [];
+
+  void getPosts() {
+    FirebaseFirestore.instance.collection('posts').get().then((value) {
+      value.docs.forEach((element) {
+        element.reference
+            .collection('likes')
+            .get()
+            .then((value) {
+              likes.add(value.docs.length);
+              postsId.add(element.id);
+        posts.add(PostModel.fromJson(element.data()));
+            })
+            .catchError((error) {});
+
+      });
+      emit(SocialGetPostsSuccessState());
+    }).catchError((error) {
+      emit(SocialGetPostsErrorState(error.toString()));
+    });
+  }
+
+  void likePost(String postId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .doc(userModel!.uId)
+        .set({
+      'like': true,
+    }).then((value) {
+      emit(SocialLikeSuccessState());
+    }).catchError((error) {
+      emit(SocialLikeFailedState());
+    });
+  }
+
+
+  void deleteLike(String postId) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .doc(userModel!.uId)
+        .delete().then((value) {
+      emit(SocialDisLikeSuccessState());
+    }).catchError((error) {
+      emit(SocialDisLikeFailedState());
+    });
   }
 }

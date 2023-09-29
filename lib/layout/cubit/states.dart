@@ -10,6 +10,14 @@ class SocialGetUserErrorState extends SocialStates{
   SocialGetUserErrorState(this.error);
 }
 
+// get posts
+class SocialGetPostsLodingState extends SocialStates{}
+class SocialGetPostsSuccessState extends SocialStates{}
+class SocialGetPostsErrorState extends SocialStates{
+  final String error;
+
+  SocialGetPostsErrorState(this.error);
+}
 
 class SocialChangeBottomNavState extends SocialStates{}
 class SocialAddPostState extends SocialStates{}
@@ -54,6 +62,14 @@ class SocialCreatePostErrorState extends SocialStates{}
 class SocialPostIMagePickedSuccessState extends SocialStates{}
 class SocialPostIMagePickedfailedState extends SocialStates{}
 
-
+//image in post removal
 class SocialRemovePostIMageSuccessState extends SocialStates{}
 class SocialRemovePostIMageFailedState extends SocialStates{}
+
+// likes
+class SocialLikeSuccessState extends SocialStates{}
+class SocialLikeFailedState extends SocialStates{}
+
+// Dislike
+class SocialDisLikeSuccessState extends SocialStates{}
+class SocialDisLikeFailedState extends SocialStates{}
