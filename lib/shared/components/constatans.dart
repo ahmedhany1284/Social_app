@@ -3,7 +3,9 @@ import 'package:social_app/modules/login_screen/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/network/local/cacheHelper.dart';
 
-const default_color=Colors.blue;
+ const default_color= Colors.blue;
+ const sender_color= Color(0xffe1e1e1);
+ const reciever_color= Colors.blue;
 
 void SignOut(context){
   CacheHelper.removeData(key: 'token').then((value) => {

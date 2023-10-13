@@ -26,11 +26,10 @@ class HomeLayout extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              cubit.title[cubit.cur_inx],
+              SocialCubit.get(context).title[SocialCubit.get(context).cur_inx],
             ),
             actions: [
               IconButton(
@@ -47,7 +46,8 @@ class HomeLayout extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-
+                  SocialCubit.get(context).signOut(context);
+                  print('here uid $uId');
                 },
                 icon: Icon(
                   IconBroken.Logout,
@@ -55,12 +55,13 @@ class HomeLayout extends StatelessWidget {
               ),
             ],
           ),
-          body: cubit.screens[cubit.cur_inx],
+          body: SocialCubit.get(context).screens[SocialCubit.get(context).cur_inx],
           bottomNavigationBar: BottomNavigationBar(
             elevation: 10.0,
-            currentIndex: cubit.cur_inx,
+            currentIndex: SocialCubit.get(context).cur_inx,
             onTap: (index) {
-              cubit.changeBottomNav(index);
+              SocialCubit.get(context).changeBottomNav(index);
+              print('cur ind ${SocialCubit.get(context).cur_inx}');
             },
             items: [
               BottomNavigationBarItem(

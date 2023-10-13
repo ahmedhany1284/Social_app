@@ -32,16 +32,17 @@ class NewPostScreen extends StatelessWidget {
                       dateTime: DateTime.now().toString(),
                       text: textController.text,
                     );
-                    SocialCubit.get(context).getPosts();
+                    // SocialCubit.get(context).getPosts();
                   } else {
                     SocialCubit.get(context).uploadPostImage(
                         dateTime: DateTime.now().toString(),
                         text: textController.text);
-                    SocialCubit.get(context).getPosts();
+                    // SocialCubit.get(context).getPosts();
                   }
                 }
-                Navigator.pop(context);
-
+                print('state -->  ${state.toString()}');
+                Navigator.pop(context,true);
+                SocialCubit.get(context).removePostImage();
               },
               child: Text(
                 'Post',
@@ -99,6 +100,11 @@ class NewPostScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextFormField(
+                    // textDirection: TextDirection.rtl,
+                    autofocus: true,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 10000,
                     controller: textController,
                     decoration: InputDecoration(
                       hintText: 'What is on your mind... ',
@@ -139,6 +145,12 @@ class NewPostScreen extends StatelessWidget {
                       )
                     ],
                   ),
+                SizedBox(height: 20.0,),
+                Container(
+                  width: double.infinity,
+                  height: 1.0,
+                  color: Colors.grey,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Row(

@@ -7,19 +7,19 @@ import 'package:social_app/models/post_model/post_model.dart';
 import 'package:social_app/shared/style/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
-   FeedsScreen({super.key});
+  FeedsScreen({super.key});
+
   int? cur_ind;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
-      listener: (context, state) {
-        if (state is SocialLikeSuccessState){
-
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return ConditionalBuilder(
-          condition: SocialCubit.get(context).posts.length > 0 || SocialCubit.get(context).userModel!=null,
+          condition:
+              (SocialCubit.get(context).posts.length > 0 ||
+                  SocialCubit.get(context).userModel != null),
           builder: (BuildContext context) {
             return SingleChildScrollView(
               child: Column(
@@ -46,14 +46,16 @@ class FeedsScreen extends StatelessWidget {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      cur_ind=index;
+                      cur_ind = index;
                       return buildPostItem(
-                          SocialCubit.get(context).posts[index], context,index);
+                          SocialCubit.get(context).posts[index],
+                          context,
+                          index);
                     },
                     separatorBuilder: (context, index) => SizedBox(
                       height: 8.0,
                     ),
-                    itemCount:SocialCubit.get(context).posts.length,
+                    itemCount: SocialCubit.get(context).posts.length,
                   ),
                   SizedBox(
                     height: 8.0,
@@ -70,7 +72,7 @@ class FeedsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostItem(PostModel model, context,index) => Card(
+  Widget buildPostItem(PostModel model, context, index) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
         margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -82,7 +84,8 @@ class FeedsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 25.0,
-                    backgroundImage: NetworkImage('${SocialCubit.get(context).userModel!.image}'),
+                    backgroundImage: NetworkImage(
+                        '${model.image}'),
                   ),
                   SizedBox(
                     width: 15.0,
@@ -175,7 +178,7 @@ class FeedsScreen extends StatelessWidget {
                               IconBroken.Heart,
                               color: Colors.red,
                               size: 16.0,
-                              fill:1.0,
+                              fill: 1.0,
                             ),
                             SizedBox(
                               width: 5.0,
@@ -262,23 +265,26 @@ class FeedsScreen extends StatelessWidget {
                           width: 5.0,
                         ),
                         Text(
-                          SocialCubit.get(context).likeID==null?'Like':'Liked',
+                          SocialCubit.get(context).likeID == null
+                              ? 'Like'
+                              : 'Liked',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
                     ),
                     onTap: () {
-                      if(SocialCubit.get(context).likeID == null){
+                      if (SocialCubit.get(context).likeID == null) {
                         SocialCubit.get(context).numLikes++;
-                        SocialCubit.get(context).likePost(SocialCubit.get(context).postsId[index]);
-                        SocialCubit.get(context).likeID=SocialCubit.get(context).postsId[index];
-                      }
-                      else{
+                        SocialCubit.get(context)
+                            .likePost(SocialCubit.get(context).postsId[index]);
+                        SocialCubit.get(context).likeID =
+                            SocialCubit.get(context).postsId[index];
+                      } else {
                         SocialCubit.get(context).numLikes--;
-                        SocialCubit.get(context).deleteLike(SocialCubit.get(context).postsId[index]);
-                        SocialCubit.get(context).likeID=null;
+                        SocialCubit.get(context).deleteLike(
+                            SocialCubit.get(context).postsId[index]);
+                        SocialCubit.get(context).likeID = null;
                       }
-
                     },
                   ),
                 ],

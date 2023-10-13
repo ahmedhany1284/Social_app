@@ -8,7 +8,7 @@ import 'package:social_app/shared/components/components.dart';
 import 'package:toast/toast.dart';
 
 class RegisterScreen extends StatelessWidget {
-  var formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> formkey = GlobalKey();
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();

@@ -1,6 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/layout.dart';
 import 'package:social_app/modules/login_screen/cubit/cubit.dart';
 import 'package:social_app/modules/login_screen/cubit/states.dart';
@@ -114,22 +116,32 @@ class LoginScreen extends StatelessWidget {
                           height: 30.0,
                         ),
 
-                        ConditionalBuilder(
-                          condition: state is LoginLoadingState,
-                          builder: (context) =>
-                              Center(child: CircularProgressIndicator()),
-                          fallback: (context) => defaultButton(
-                            function: () {
-                              if (formkey.currentState!.validate()) {
-                                LoginCubit.get(context).userLogin(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
-                              }
-                            },
-                            text: 'Login',
+                        BlocProvider(
+                          create: (context) => SocialCubit()
+                            ..getUserData()
+                            ..getPosts(),
+                          child: ConditionalBuilder(
+                            condition: state is LoginLoadingState,
+                            builder: (context) =>
+                                Center(child: CircularProgressIndicator()),
+                            fallback: (context) => defaultButton(
+                              function: () {
+                                if (formkey.currentState!.validate()) {
+                                  LoginCubit.get(context).userLogin(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                  );
+                                  SocialCubit.get(context)
+                                    ..getUserData()
+                                    ..getPosts();
+
+                                }
+                              },
+                              text: 'Login',
+                            ),
                           ),
                         ),
+
 
                         const SizedBox(
                           height: 15.0,
@@ -159,4 +171,6 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

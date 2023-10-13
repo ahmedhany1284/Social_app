@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:social_app/models/massage_model/massage_model.dart';
+import 'package:social_app/shared/components/constatans.dart';
 import 'package:social_app/shared/style/icon_broken.dart';
 import 'package:toast/toast.dart';
 
@@ -28,7 +30,6 @@ PreferredSizeWidget customAppBar({
           Navigator.pop(context);
         },
         icon: Icon(IconBroken.Arrow___Left_2),
-
       ),
       titleSpacing: 5.0,
       title: Text('$title'),
@@ -113,7 +114,6 @@ Widget defaultTextButton({
       ),
     );
 
-
 void showToast({
   required String massage,
   required ToastStates state,
@@ -128,6 +128,7 @@ void showToast({
         color: Colors.white,
       ),
     );
+
 enum ToastStates { SUCCESS, ERROR, WARNING }
 
 Color? chooseToastColor(ToastStates state) {
@@ -154,6 +155,60 @@ Widget myDivider() => Padding(
       child: Container(
         width: double.infinity,
         height: 1.0,
-        color: Colors.grey[300],
+        color: sender_color,
+      ),
+    );
+
+Widget chatBubble(MessageModel model) => Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.only(
+          left: 16.0,
+          top: 16.0,
+          bottom: 16.0,
+          right: 16.0,
+        ),
+        margin: EdgeInsets.symmetric(
+          horizontal: 20.0,
+          vertical: 5.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+            bottomRight: Radius.circular(32),
+          ),
+          color: sender_color,
+        ),
+        child: Text(
+          '${model.text}',
+        ),
+      ),
+    );
+
+Widget myChatBubble(MessageModel model) => Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        padding: EdgeInsets.only(
+          left: 16.0,
+          top: 16.0,
+          bottom: 16.0,
+          right: 16.0,
+        ),
+        margin: EdgeInsets.symmetric(
+          horizontal: 20.0,
+          vertical: 5.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(32),
+            topRight: Radius.circular(32),
+            bottomLeft: Radius.circular(32),
+          ),
+          color: reciever_color[300],
+        ),
+        child: Text(
+          '${model.text}',
+        ),
       ),
     );
