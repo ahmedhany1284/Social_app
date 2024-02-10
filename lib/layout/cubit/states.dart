@@ -1,15 +1,50 @@
-abstract class SocialStates{}
+import 'package:equatable/equatable.dart';
+import 'package:social_app/models/usermodel/User_model.dart';
+
+abstract class SocialStates extends Equatable {
+  const SocialStates();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class SocialInitialState extends SocialStates{}
 
 class SocialGetUserLodingState extends SocialStates{}
-class SocialGetUserSuccessState extends SocialStates{}
-class SocialGetUserErrorState extends SocialStates{
+class SocialGetUserSuccessState extends SocialStates with EquatableMixin {
+  // Define properties for this state
+  final UserModel userModel;
+
+  // Constructor
+  const SocialGetUserSuccessState(this.userModel);
+
+  // Override the props getter
+  @override
+  List<Object?> get props => [userModel];
+}
+class SocialGetUserErrorState extends SocialStates with EquatableMixin {
+  // Define properties for this state
   final String error;
 
-  SocialGetUserErrorState(this.error);
+  // Constructor
+  const SocialGetUserErrorState(this.error);
+
+  // Override the props getter
+  @override
+  List<Object?> get props => [error];
 }
 
+//log out
+class SocialLogOutLodingState extends SocialStates{}
+class SocialLogOutSuccessState extends SocialStates{}
+class SocialLogOutErrorState extends SocialStates {
+  final String error;
+
+  const SocialLogOutErrorState(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}
 
 
 //get all users
@@ -18,7 +53,7 @@ class SocialGetAllUserSuccessState extends SocialStates{}
 class SocialGetAllUserErrorState extends SocialStates{
   final String error;
 
-  SocialGetAllUserErrorState(this.error);
+  const SocialGetAllUserErrorState(this.error);
 }
 
 
@@ -28,7 +63,7 @@ class SocialGetPostsSuccessState extends SocialStates{}
 class SocialGetPostsErrorState extends SocialStates{
   final String error;
 
-  SocialGetPostsErrorState(this.error);
+  const SocialGetPostsErrorState(this.error);
 }
 
 class SocialChangeBottomNavState extends SocialStates{}

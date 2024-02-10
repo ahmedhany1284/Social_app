@@ -24,5 +24,7 @@ class MyBlocObserver extends BlocObserver
   void onClose(BlocBase bloc) {
     super.onClose(bloc);
     print('onClose -- ${bloc.runtimeType}');
+
   }
+
 }

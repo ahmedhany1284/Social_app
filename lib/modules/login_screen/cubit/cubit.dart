@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/modules/login_screen/cubit/states.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -34,4 +35,23 @@ class LoginCubit extends Cubit<LoginStates> {
 
     emit(LoginChangePasswordState());
   }
+
+
+
+  Future<void> performLoginAndRefresh() async {
+    // Create an instance of SocialCubit
+    SocialCubit socialCubit = SocialCubit();
+
+    // Call the login function from SocialCubit and wait for it to complete
+    await socialCubit.getUserData();
+
+    // Do something after login completes, like refreshing the UI
+    // ...
+
+    // Emit a new state to trigger a UI refresh
+    emit(LoginRefreshState());
+  }
+
+
+
 }

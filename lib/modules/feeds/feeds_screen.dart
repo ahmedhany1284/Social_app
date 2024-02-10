@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/models/post_model/post_model.dart';
+import 'package:social_app/modules/login_screen/cubit/states.dart';
 import 'package:social_app/shared/style/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
@@ -16,57 +17,63 @@ class FeedsScreen extends StatelessWidget {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        return ConditionalBuilder(
-          condition:
-              (SocialCubit.get(context).posts.length > 0 ||
+
+        return FutureBuilder(
+          future: SocialCubit.get(context).getUserData(),
+          builder: (context,state) {
+            // print('state in the feed screen hello here ---> ${SocialCubit.get(context).userModel?.name}');
+            return ConditionalBuilder(
+              condition: (SocialCubit.get(context).posts.isNotEmpty ||
                   SocialCubit.get(context).userModel != null),
-          builder: (BuildContext context) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    elevation: 20.0,
-                    margin: EdgeInsets.all(8.0),
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Image(
-                          image: NetworkImage(
-                            'https://img.freepik.com/free-vector/brainstorming-concept-landing-page_52683-25791.jpg',
-                          ),
-                          fit: BoxFit.cover,
-                          height: 200.0,
-                          width: double.infinity,
+              builder: (BuildContext context) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        elevation: 20.0,
+                        margin: EdgeInsets.all(8.0),
+                        child: Stack(
+                          alignment: AlignmentDirectional.bottomEnd,
+                          children: [
+                            Image(
+                              image: NetworkImage(
+                                'https://img.freepik.com/free-vector/brainstorming-concept-landing-page_52683-25791.jpg',
+                              ),
+                              fit: BoxFit.cover,
+                              height: 200.0,
+                              width: double.infinity,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          cur_ind = index;
+                          return buildPostItem(
+                              SocialCubit.get(context).posts[index],
+                              context,
+                              index);
+                        },
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 8.0,
+                        ),
+                        itemCount: SocialCubit.get(context).posts.length,
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                    ],
                   ),
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      cur_ind = index;
-                      return buildPostItem(
-                          SocialCubit.get(context).posts[index],
-                          context,
-                          index);
-                    },
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 8.0,
-                    ),
-                    itemCount: SocialCubit.get(context).posts.length,
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                ],
-              ),
+                );
+              },
+              fallback: (BuildContext context) {
+                return const Center(child: CircularProgressIndicator());
+              },
             );
-          },
-          fallback: (BuildContext context) {
-            return Center(child: CircularProgressIndicator());
-          },
+          }
         );
       },
     );
@@ -75,19 +82,18 @@ class FeedsScreen extends StatelessWidget {
   Widget buildPostItem(PostModel model, context, index) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5.0,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
               Row(
                 children: [
                   CircleAvatar(
                     radius: 25.0,
-                    backgroundImage: NetworkImage(
-                        '${model.image}'),
+                    backgroundImage: NetworkImage('${model.image}'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15.0,
                   ),
                   Expanded(
@@ -98,14 +104,14 @@ class FeedsScreen extends StatelessWidget {
                           children: [
                             Text(
                               '${model.name}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 height: 1.4,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5.0,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.check_circle,
                               color: Colors.blue,
                               size: 16.0,
@@ -124,12 +130,12 @@ class FeedsScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         IconBroken.More_Circle,
                       ))
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5.0,
               ),
               Padding(
@@ -174,13 +180,13 @@ class FeedsScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               IconBroken.Heart,
                               color: Colors.red,
                               size: 16.0,
                               fill: 1.0,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5.0,
                             ),
                             Text(
@@ -200,12 +206,12 @@ class FeedsScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Icon(
+                            const Icon(
                               IconBroken.Chat,
                               color: Colors.amber,
                               size: 16.0,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10.0,
                             ),
                             Text(
@@ -238,7 +244,7 @@ class FeedsScreen extends StatelessWidget {
                             backgroundImage: NetworkImage(
                                 '${SocialCubit.get(context).userModel?.image}'),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 15.0,
                           ),
                           Text(
@@ -256,12 +262,12 @@ class FeedsScreen extends StatelessWidget {
                   InkWell(
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           IconBroken.Heart,
                           size: 16.0,
                           color: Colors.red,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5.0,
                         ),
                         Text(

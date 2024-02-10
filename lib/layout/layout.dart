@@ -18,6 +18,7 @@ class HomeLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {
+        // SocialCubit.get(context).getUserData();
         if (state is SocialAddPostState) {
           navigateTo(
             context,
@@ -26,76 +27,79 @@ class HomeLayout extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              SocialCubit.get(context).title[SocialCubit.get(context).cur_inx],
-            ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  IconBroken.Notification,
+        return FutureBuilder(
+          future: SocialCubit.get(context).getUserData(),
+          builder: (context, state) {
+            var userModel=SocialCubit.get(context).getUserData();
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  SocialCubit.get(context).title[SocialCubit.get(context).cur_inx],
                 ),
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      IconBroken.Notification,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      IconBroken.Search,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      SocialCubit.get(context).signOut(context);
+
+                      if(SocialCubit.get(context).userModel!=null){
+                        print('----------------------------------------------------------------------->model is not null');
+                      }
+                    },
+                    icon: Icon(
+                      IconBroken.Logout,
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  IconBroken.Search,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  SocialCubit.get(context).signOut(context);
-                  print('here uid $uId');
+              body: SocialCubit.get(context).screens[SocialCubit.get(context).cur_inx],
+              bottomNavigationBar: BottomNavigationBar(
+                elevation: 10.0,
+                currentIndex: SocialCubit.get(context).cur_inx,
+                onTap: (index) {
+                  SocialCubit.get(context).changeBottomNav(index);
+                  print('cur ind ${SocialCubit.get(context).cur_inx}');
                 },
-                icon: Icon(
-                  IconBroken.Logout,
-                ),
+                items: const[
+                  BottomNavigationBarItem(
+                    label: 'Home',
+                    icon: Icon(
+                      IconBroken.Home,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Chat',
+                    icon: Icon(
+                      IconBroken.Chat,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Post',
+                    icon: Icon(
+                      IconBroken.Plus,
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    label: 'Settings',
+                    icon: Icon(
+                      IconBroken.Setting,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          body: SocialCubit.get(context).screens[SocialCubit.get(context).cur_inx],
-          bottomNavigationBar: BottomNavigationBar(
-            elevation: 10.0,
-            currentIndex: SocialCubit.get(context).cur_inx,
-            onTap: (index) {
-              SocialCubit.get(context).changeBottomNav(index);
-              print('cur ind ${SocialCubit.get(context).cur_inx}');
-            },
-            items: [
-              BottomNavigationBarItem(
-                label: 'Home',
-                icon: Icon(
-                  IconBroken.Home,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Chat',
-                icon: Icon(
-                  IconBroken.Chat,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Post',
-                icon: Icon(
-                  IconBroken.Plus,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Users',
-                icon: Icon(
-                  IconBroken.Location,
-                ),
-              ),
-              BottomNavigationBarItem(
-                label: 'Settings',
-                icon: Icon(
-                  IconBroken.Setting,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

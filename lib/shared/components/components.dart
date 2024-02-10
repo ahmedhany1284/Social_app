@@ -9,6 +9,7 @@ void navigateTo(context, widget) => Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => widget,
+        maintainState: false,
       ),
     );
 
@@ -16,6 +17,7 @@ void navigateToAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(
       builder: (context) => widget,
+          maintainState: false,
     ),
     (Route<dynamic> route) => false);
 
