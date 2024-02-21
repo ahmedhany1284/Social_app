@@ -13,4 +13,6 @@ class ChatSendMassageSuccessState extends ChatStates{}
 class ChatSendMassageErrorState extends ChatStates{}
 
 class ChatGetMassageSuccessState extends ChatStates{}
+class ChatGetMassageLodingState extends ChatStates{}
+class ChatGetMassageErrorState extends ChatStates{}
 

@@ -5,9 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/models/usermodel/User_model.dart';
-import 'package:social_app/modules/private_chat/chat_cubit/states.dart';
+import 'package:social_app/modules/chats/presentaion/view_model/states.dart';
 
-import '../../../models/massage_model/massage_model.dart';
+import '../../../../../models/massage_model/massage_model.dart';
 
 
 class ChatCubit extends Cubit<ChatStates> {
@@ -66,6 +66,7 @@ class ChatCubit extends Cubit<ChatStates> {
   void getmassages({
     required String receiverID,
   }) {
+    emit(ChatGetMassageLodingState());
     FirebaseFirestore.instance
         .collection('users')
         .doc(userModel?.uId)
@@ -75,11 +76,13 @@ class ChatCubit extends Cubit<ChatStates> {
         .orderBy('dateTime')
         .snapshots()
         .listen((event) {
-      messages = [];
+      List<MessageModel> updatedMessages = [];
       event.docs.forEach((element) {
-        messages.add(MessageModel.fromJson(element.data()));
+        updatedMessages.add(MessageModel.fromJson(element.data()));
       });
+      messages = updatedMessages;
       emit(ChatGetMassageSuccessState());
     });
   }
+
 }

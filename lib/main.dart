@@ -5,10 +5,9 @@ import 'package:social_app/firebase_options.dart';
 import 'package:social_app/layout/cubit/cubit.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/layout/layout.dart';
+import 'package:social_app/modules/chats/presentaion/view_model/cubit.dart';
 import 'package:social_app/modules/edit_profile/edit_page_cubit/cubit.dart';
 import 'package:social_app/modules/login_screen/login_screen.dart';
-import 'package:social_app/modules/private_chat/chat_cubit/cubit.dart';
-import 'package:social_app/shared/bloc-observer.dart';
 import 'package:social_app/shared/components/constatans.dart';
 import 'package:social_app/shared/network/local/cacheHelper.dart';
 import 'package:social_app/shared/network/remote/dio_helper.dart';
@@ -21,7 +20,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
   Widget widget;
@@ -54,22 +52,24 @@ class MyApp extends StatelessWidget {
             ..getPosts(),
         ),
         BlocProvider(
-          create: (context) => EditPageCbit()
-        ),BlocProvider(
-          create: (context) => ChatCubit()
+            create: (context) => EditPageCbit()
+        ),
+        BlocProvider(
+            create: (context) => ChatCubit()
         )
       ],
-        child: BlocConsumer<SocialCubit, SocialStates>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            ToastContext().init(context);
-            return MaterialApp(
-              title: 'Social App',
-              theme: lightTheme,
-              home: startwidget,
-            );
-          },
-        ),
+      child: BlocConsumer<SocialCubit, SocialStates>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          ToastContext().init(context);
+          return MaterialApp(
+            title: 'Social App',
+            theme: lightTheme,
+            home: startwidget,
+          );
+        },
+      ),
     );
   }
 }
+

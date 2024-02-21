@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social_app/layout/cubit/states.dart';
 import 'package:social_app/models/post_model/post_model.dart';
-import 'package:social_app/modules/chats/chat_screen.dart';
+import 'package:social_app/modules/chats/presentaion/view/chat_screen_view.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/login_screen/login_screen.dart';
 import 'package:social_app/modules/new_post/new_post_Screen.dart';
@@ -47,7 +47,7 @@ class SocialCubit extends Cubit<SocialStates> {
   int cur_inx = 0;
   List<Widget> screens = [
     FeedsScreen(),
-    const ChatsScreen(),
+    const ChatScreenView(),
     NewPostScreen(),
     const SettingsScreen(),
   ];
